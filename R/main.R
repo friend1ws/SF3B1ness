@@ -153,22 +153,3 @@ SF3B1ness_SJ <- function(SJ_file, ref = "hg19") {
 
 
 
-
-# junction_coverage_file <- "~/Downloads/SRP056033.junction_coverage.tsv.gz"
-
-# SJ_file <- "CHOL/TCGA-4G-AAZT-01A-11R-A41I-07.SJ.out.tab"
-# SJ_file <- "CHOL/TCGA-3X-AAVA-01A-11R-A41I-07.SJ.out.tab"
-# SJ_file <- "CHOL/TCGA-W5-AA2U-01A-11R-A41I-07.SJ.out.tab"
-
-# D <- c()
-# for(i in 1:length(sj_list)) {
-#   tD <- SF3B1ness_SJ(sj_list[i])
-#   D <- rbind(D, tD)
-# }
-
-
-# hello <- function() {
-#   print("Hello, world!")
-# }
-
-

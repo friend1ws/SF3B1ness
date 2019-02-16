@@ -1,6 +1,8 @@
 Package: SF3B1ness
 Type: Package
-Title: Obtain SF3B1ness (the amount of SF3B1 functional mutation on transcriptome) score 
+Title: Obtain SF3B1ness score 
+Description: SF3B1 is a splicing factor gene and somatic mutations in this gene can impact on global splicing changes.
+    This package predicts the existence of SF3B1 functional mutations from splicing junction data via calculating newly defined SF3B1ness score.
 Version: 0.1.0
 Authors@R: person("Yuichi", "Shiraishi", email = "friend1ws@gmail.com", role = "cre")
 URL: https://github.com/friende1ws/SF3B1ness
