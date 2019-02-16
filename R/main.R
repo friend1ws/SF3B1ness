@@ -30,7 +30,7 @@ get_score <- function(junc_counts_info) {
   scores <- c()
   for (i in 1:length(Sample_ID_list)) {
 
-    temp_Junc_couts_info <- junc_counts_info %>% filter(Sample_ID == Sample_ID_list[i])
+    temp_Junc_couts_info <- junc_counts_info %>% dplyr::filter(Sample_ID == Sample_ID_list[i])
 
     temp_junc_counts_info2 <- SF3B1_info %>%
       dplyr::left_join(temp_Junc_couts_info, by = c("Junction_ID_Alt" = "Junction_ID")) %>%
