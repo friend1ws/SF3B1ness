@@ -2,3 +2,4 @@
 
 export(sf3b1ness_SJ)
 export(sf3b1ness_recount2)
+importFrom(magrittr,"%>%")
