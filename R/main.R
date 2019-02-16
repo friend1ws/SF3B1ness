@@ -11,9 +11,9 @@ get_prob_for_zibb <- function(params, s_n, s_k) {
   p_pi <- params[3]
 
   if (s_k == 0) {
-    return(p_pi + (1 - p_pi) * dbetabinom.ab(0, s_n, p_alpha, p_beta))
+    return(p_pi + (1 - p_pi) * VGAM::dbetabinom.ab(0, s_n, p_alpha, p_beta))
   } else {
-    return((1 - p_pi) * dbetabinom.ab(s_k, s_n, p_alpha, p_beta))
+    return((1 - p_pi) * VGAM::dbetabinom.ab(s_k, s_n, p_alpha, p_beta))
   }
 
 }
@@ -31,16 +31,16 @@ get_score <- function(junc_counts_info) {
     temp_Junc_couts_info <- junc_counts_info %>% filter(Sample_ID == Sample_ID_list[i])
 
     temp_junc_counts_info2 <- SF3B1_info %>%
-      left_join(temp_Junc_couts_info, by = c("Junction_ID_Alt" = "Junction_ID")) %>%
-      left_join(temp_Junc_couts_info, by = c("Junction_ID_Ref" = "Junction_ID")) %>%
-      select(Alpha_0, Beta_0, Pi_0, Alpha_1, Beta_1, Pi_1, Junction_Count_Alt = Junction_Count.x, Junction_Count_Ref = Junction_Count.y)
+      dplyr::left_join(temp_Junc_couts_info, by = c("Junction_ID_Alt" = "Junction_ID")) %>%
+      dplyr::left_join(temp_Junc_couts_info, by = c("Junction_ID_Ref" = "Junction_ID")) %>%
+      dplyr::select(Alpha_0, Beta_0, Pi_0, Alpha_1, Beta_1, Pi_1, Junction_Count_Alt = Junction_Count.x, Junction_Count_Ref = Junction_Count.y)
 
     temp_junc_counts_info2$Junction_Count_Alt[is.na(temp_junc_counts_info2$Junction_Count_Alt)] <- 0
     temp_junc_counts_info2$Junction_Count_Ref[is.na(temp_junc_counts_info2$Junction_Count_Ref)] <- 0
 
 
-    prob0 <- unlist(map(temp_junc_counts_info2 %>% transpose(), function(x) {get_prob_for_zibb(c(x$Alpha_0, x$Beta_0, x$Pi_0), x$Junction_Count_Ref + x$Junction_Count_Alt, x$Junction_Count_Alt)}))
-    prob1 <- unlist(map(temp_junc_counts_info2 %>% transpose(), function(x) {get_prob_for_zibb(c(x$Alpha_1, x$Beta_1, x$Pi_1), x$Junction_Count_Ref + x$Junction_Count_Alt, x$Junction_Count_Alt)}))
+    prob0 <- unlist(purrr::map(temp_junc_counts_info2 %>% transpose(), function(x) {get_prob_for_zibb(c(x$Alpha_0, x$Beta_0, x$Pi_0), x$Junction_Count_Ref + x$Junction_Count_Alt, x$Junction_Count_Alt)}))
+    prob1 <- unlist(purrr::map(temp_junc_counts_info2 %>% transpose(), function(x) {get_prob_for_zibb(c(x$Alpha_1, x$Beta_1, x$Pi_1), x$Junction_Count_Ref + x$Junction_Count_Alt, x$Junction_Count_Alt)}))
 
     probs <- cbind(prob0, prob1)
     probs[probs < 1e-100] <- 1e-100
@@ -64,8 +64,8 @@ get_score <- function(junc_counts_info) {
 #' @return data frame for Junction_ID, Sample_ID and Junction_Count
 get_junc_count_info_recount2 <- function(junction_coverage_file) {
 
-  A <- read_tsv(junction_coverage_file, col_names = FALSE, col_types = "ccc") %>%
-    filter(X1 %in% c(SF3B1_info$Junction_ID_Alt, SF3B1_info$Junction_ID_Ref))
+  A <- readr::read_tsv(junction_coverage_file, col_names = FALSE, col_types = "ccc") %>%
+    dplyr::filter(X1 %in% c(SF3B1_info$Junction_ID_Alt, SF3B1_info$Junction_ID_Ref))
 
   sample_ids <- c()
   junc_counts <- c()
@@ -91,18 +91,18 @@ get_junc_count_info_recount2 <- function(junction_coverage_file) {
 #' @return data frame for Junction_ID, Sample_ID and Junction_Count
 get_junc_count_info_SJ <- function(SJ_file, ref = "hg19") {
 
-  SJ <- read_tsv(SJ_file, col_names = FALSE, col_types = "ccciiiiii") %>%
-    mutate(SJ_Key = str_c(str_replace(X1, "chr", ""), X2, X3, sep = ","), Sample_ID = "1") %>%
-    select(Sample_ID, SJ_Key, Junction_Count = X7)
+  SJ <- readr::read_tsv(SJ_file, col_names = FALSE, col_types = "ccciiiiii") %>%
+    dplyr::mutate(SJ_Key = str_c(str_replace(X1, "chr", ""), X2, X3, sep = ","), Sample_ID = "1") %>%
+    dplyr::select(Sample_ID, SJ_Key, Junction_Count = X7)
 
   if (ref == "hg19") {
     junc_counts_info <-
-      rbind(SF3B1_info %>% inner_join(SJ, by = c("Junction_Key_Alt_GRCh37" = "SJ_Key")) %>% select(Sample_ID, Junction_ID = Junction_ID_Alt, Junction_Count),
-            SF3B1_info %>% inner_join(SJ, by = c("Junction_Key_Ref_GRCh37" = "SJ_Key")) %>% select(Sample_ID, Junction_ID = Junction_ID_Ref, Junction_Count))
+      rbind(SF3B1_info %>% inner_join(SJ, by = c("Junction_Key_Alt_GRCh37" = "SJ_Key")) %>% dplyr::select(Sample_ID, Junction_ID = Junction_ID_Alt, Junction_Count),
+            SF3B1_info %>% inner_join(SJ, by = c("Junction_Key_Ref_GRCh37" = "SJ_Key")) %>% dplyr::select(Sample_ID, Junction_ID = Junction_ID_Ref, Junction_Count))
   } else if (ref == "hg38") {
     junc_counts_info <-
-      rbind(SF3B1_info %>% inner_join(SJ, by = c("Junction_Key_Alt_GRCh38" = "SJ_Key")) %>% select(Sample_ID, Junction_ID = Junction_ID_Alt, Junction_Count),
-            SF3B1_info %>% inner_join(SJ, by = c("Junction_Key_Ref_GRCh38" = "SJ_Key")) %>% select(Sample_ID, Junction_ID = Junction_ID_Ref, Junction_Count))
+      rbind(SF3B1_info %>% inner_join(SJ, by = c("Junction_Key_Alt_GRCh38" = "SJ_Key")) %>% dplyr::select(Sample_ID, Junction_ID = Junction_ID_Alt, Junction_Count),
+            SF3B1_info %>% inner_join(SJ, by = c("Junction_Key_Ref_GRCh38" = "SJ_Key")) %>% dplyr::select(Sample_ID, Junction_ID = Junction_ID_Ref, Junction_Count))
   } else {
     stop("ref should be hg19 or hg38")
   }
@@ -123,7 +123,7 @@ sf3b1ness_recount2 <- function(junction_coverage_file) {
   junc_counts_info <- get_junc_count_info_recount2(junction_coverage_file)
   scores <- get_score(junc_counts_info)
 
-  D <- scores %>% left_join(Sample_ID_info, by = c("Sample_ID" = "X1")) %>% select(Study = X2, Run = X3, Score = Score)
+  D <- scores %>% dplyr::left_join(Sample_ID_info, by = c("Sample_ID" = "X1")) %>% dplyr::select(Study = X2, Run = X3, Score = Score)
   return(D)
 }
 

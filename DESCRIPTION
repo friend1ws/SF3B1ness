@@ -4,7 +4,7 @@ Title: Obtain SF3B1ness (the amount of SF3B1 functional mutation on transcriptom
 Version: 0.1.0
 Authors@R: person("Yuichi", "Shiraishi", email = "friend1ws@gmail.com", role = "cre")
 URL: https://github.com/friende1ws/SF3B1ness
-License: GPLv3
+License: GPL-3
 Encoding: UTF-8
 LazyData: true
 Imports:
