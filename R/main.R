@@ -125,7 +125,7 @@ get_junc_count_info_SJ <- function(SJ_file, ref = "hg19") {
 #'
 #' @importFrom magrittr %>%
 #' @export
-sf3b1ness_recount2 <- function(junction_coverage_file) {
+SF3B1ness_recount2 <- function(junction_coverage_file) {
 
   junc_counts_info <- get_junc_count_info_recount2(junction_coverage_file)
   scores <- get_score(junc_counts_info)
@@ -142,7 +142,7 @@ sf3b1ness_recount2 <- function(junction_coverage_file) {
 #'
 #' @importFrom magrittr %>%
 #' @export
-sf3b1ness_SJ <- function(SJ_file, ref = "hg19") {
+SF3B1ness_SJ <- function(SJ_file, ref = "hg19") {
 
   junc_counts_info <- get_junc_count_info_SJ(SJ_file, ref = "hg19")
   scores <- get_score(junc_counts_info)
@@ -162,7 +162,7 @@ sf3b1ness_SJ <- function(SJ_file, ref = "hg19") {
 
 # D <- c()
 # for(i in 1:length(sj_list)) {
-#   tD <- sf3b1ness_SJ(sj_list[i])
+#   tD <- SF3B1ness_SJ(sj_list[i])
 #   D <- rbind(D, tD)
 # }
 
