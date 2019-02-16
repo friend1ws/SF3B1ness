@@ -22,6 +22,8 @@ get_prob_for_zibb <- function(params, s_n, s_k) {
 #'
 #' @param junc_counts_info data frame for Junction_ID, Sample_ID, Junction_Count.
 #' @return data frame for Sample_ID and SF3B1ness score.
+#'
+#' @importFrom magrittr %>%
 get_score <- function(junc_counts_info) {
 
   Sample_ID_list <- unique(junc_counts_info$Sample_ID)
@@ -39,8 +41,8 @@ get_score <- function(junc_counts_info) {
     temp_junc_counts_info2$Junction_Count_Ref[is.na(temp_junc_counts_info2$Junction_Count_Ref)] <- 0
 
 
-    prob0 <- unlist(purrr::map(temp_junc_counts_info2 %>% transpose(), function(x) {get_prob_for_zibb(c(x$Alpha_0, x$Beta_0, x$Pi_0), x$Junction_Count_Ref + x$Junction_Count_Alt, x$Junction_Count_Alt)}))
-    prob1 <- unlist(purrr::map(temp_junc_counts_info2 %>% transpose(), function(x) {get_prob_for_zibb(c(x$Alpha_1, x$Beta_1, x$Pi_1), x$Junction_Count_Ref + x$Junction_Count_Alt, x$Junction_Count_Alt)}))
+    prob0 <- unlist(purrr::map(temp_junc_counts_info2 %>% purrr::transpose(), function(x) {get_prob_for_zibb(c(x$Alpha_0, x$Beta_0, x$Pi_0), x$Junction_Count_Ref + x$Junction_Count_Alt, x$Junction_Count_Alt)}))
+    prob1 <- unlist(purrr::map(temp_junc_counts_info2 %>% purrr::transpose(), function(x) {get_prob_for_zibb(c(x$Alpha_1, x$Beta_1, x$Pi_1), x$Junction_Count_Ref + x$Junction_Count_Alt, x$Junction_Count_Alt)}))
 
     probs <- cbind(prob0, prob1)
     probs[probs < 1e-100] <- 1e-100
@@ -62,6 +64,8 @@ get_score <- function(junc_counts_info) {
 #'
 #' @param junction_coverage_file Junction coverate file obtained from recount2.
 #' @return data frame for Junction_ID, Sample_ID and Junction_Count
+#'
+#' @importFrom magrittr %>%
 get_junc_count_info_recount2 <- function(junction_coverage_file) {
 
   A <- readr::read_tsv(junction_coverage_file, col_names = FALSE, col_types = "ccc") %>%
@@ -71,8 +75,8 @@ get_junc_count_info_recount2 <- function(junction_coverage_file) {
   junc_counts <- c()
   junc_ids <- c()
   for (i in 1:nrow(A)) {
-    tsample_ids <- as.numeric(str_split(A$X2[i], pattern = ',', simplify = TRUE))
-    tjunc_counts <- as.numeric(str_split(A$X3[i], pattern = ',', simplify = TRUE))
+    tsample_ids <- as.numeric(stringr::str_split(A$X2[i], pattern = ',', simplify = TRUE))
+    tjunc_counts <- as.numeric(stringr::str_split(A$X3[i], pattern = ',', simplify = TRUE))
 
     sample_ids <- c(sample_ids, tsample_ids)
     junc_counts <- c(junc_counts, tjunc_counts)
@@ -89,6 +93,8 @@ get_junc_count_info_recount2 <- function(junction_coverage_file) {
 #' @param SJ_file Junction file obtained through STAR alignment as ".SJ.out.tab".
 #' @param ref Reference genome (hg19 or hg38).
 #' @return data frame for Junction_ID, Sample_ID and Junction_Count
+#'
+#' @importFrom magrittr %>%
 get_junc_count_info_SJ <- function(SJ_file, ref = "hg19") {
 
   SJ <- readr::read_tsv(SJ_file, col_names = FALSE, col_types = "ccciiiiii") %>%
@@ -117,6 +123,7 @@ get_junc_count_info_SJ <- function(SJ_file, ref = "hg19") {
 #' @param junction_coverage_file Junction coverate file obtained from recount2.
 #' @return data frame for StudyID, Run ID and SF3B1ness score
 #'
+#' @importFrom magrittr %>%
 #' @export
 sf3b1ness_recount2 <- function(junction_coverage_file) {
 
@@ -133,6 +140,7 @@ sf3b1ness_recount2 <- function(junction_coverage_file) {
 #' @param SJ_file Junction file obtained through STAR alignment as SJ.out.tab file
 #' @return SF3B1ness score
 #'
+#' @importFrom magrittr %>%
 #' @export
 sf3b1ness_SJ <- function(SJ_file, ref = "hg19") {
 

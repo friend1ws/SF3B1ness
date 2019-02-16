@@ -11,5 +11,6 @@ Imports:
     VGAM,
     readr,
     stringr,
-    dplyr
+    dplyr,
+    magrittr
 RoxygenNote: 6.1.1
