@@ -146,7 +146,7 @@ SF3B1ness_SJ <- function(SJ_file, ref = "hg19") {
 
   junc_counts_info <- get_junc_count_info_SJ(SJ_file, ref = "hg19")
 
-  if (nrow(a) <= 5) {
+  if (nrow(junc_counts_info) <= 5) {
       warning("Too few splicing junctions. Check the quality of the input and the reference genome ID")
     scores <- data.frame(Sample_ID = "1", Score = NA)
   } else {
