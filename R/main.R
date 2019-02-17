@@ -145,9 +145,15 @@ SF3B1ness_recount2 <- function(junction_coverage_file) {
 SF3B1ness_SJ <- function(SJ_file, ref = "hg19") {
 
   junc_counts_info <- get_junc_count_info_SJ(SJ_file, ref = "hg19")
-  scores <- get_score(junc_counts_info)
 
-  D <- data.frame(Sample_ID_info = str_replace(basename(SJ_file), ".SJ.out.tab", ""), Score = scores$Score, stringsAsFactors = FALSE)
+  if (nrow(a) <= 5) {
+      warning("Too few splicing junctions. Check the quality of the input and the reference genome ID")
+    scores <- data.frame(Sample_ID = "1", Score = NA)
+  } else {
+    scores <- get_score(junc_counts_info)
+  }
+
+  D <- data.frame(Sample_Name = str_replace(basename(SJ_file), ".SJ.out.tab", ""), Score = scores$Score, stringsAsFactors = FALSE)
   return(D)
 }
 
