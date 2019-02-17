@@ -98,17 +98,17 @@ get_junc_count_info_recount2 <- function(junction_coverage_file) {
 get_junc_count_info_SJ <- function(SJ_file, ref = "hg19") {
 
   SJ <- readr::read_tsv(SJ_file, col_names = FALSE, col_types = "ccciiiiii") %>%
-    dplyr::mutate(SJ_Key = str_c(str_replace(X1, "chr", ""), X2, X3, sep = ","), Sample_ID = "1") %>%
+    dplyr::mutate(SJ_Key = stringr::str_c(str_replace(X1, "chr", ""), X2, X3, sep = ","), Sample_ID = "1") %>%
     dplyr::select(Sample_ID, SJ_Key, Junction_Count = X7)
 
   if (ref == "hg19") {
     junc_counts_info <-
-      rbind(SF3B1_info %>% inner_join(SJ, by = c("Junction_Key_Alt_GRCh37" = "SJ_Key")) %>% dplyr::select(Sample_ID, Junction_ID = Junction_ID_Alt, Junction_Count),
-            SF3B1_info %>% inner_join(SJ, by = c("Junction_Key_Ref_GRCh37" = "SJ_Key")) %>% dplyr::select(Sample_ID, Junction_ID = Junction_ID_Ref, Junction_Count))
+      rbind(SF3B1_info %>% dplyr::inner_join(SJ, by = c("Junction_Key_Alt_GRCh37" = "SJ_Key")) %>% dplyr::select(Sample_ID, Junction_ID = Junction_ID_Alt, Junction_Count),
+            SF3B1_info %>% dplyr::inner_join(SJ, by = c("Junction_Key_Ref_GRCh37" = "SJ_Key")) %>% dplyr::select(Sample_ID, Junction_ID = Junction_ID_Ref, Junction_Count))
   } else if (ref == "hg38") {
     junc_counts_info <-
-      rbind(SF3B1_info %>% inner_join(SJ, by = c("Junction_Key_Alt_GRCh38" = "SJ_Key")) %>% dplyr::select(Sample_ID, Junction_ID = Junction_ID_Alt, Junction_Count),
-            SF3B1_info %>% inner_join(SJ, by = c("Junction_Key_Ref_GRCh38" = "SJ_Key")) %>% dplyr::select(Sample_ID, Junction_ID = Junction_ID_Ref, Junction_Count))
+      rbind(SF3B1_info %>% dplyr::inner_join(SJ, by = c("Junction_Key_Alt_GRCh38" = "SJ_Key")) %>% dplyr::select(Sample_ID, Junction_ID = Junction_ID_Alt, Junction_Count),
+            SF3B1_info %>% dplyr::inner_join(SJ, by = c("Junction_Key_Ref_GRCh38" = "SJ_Key")) %>% dplyr::select(Sample_ID, Junction_ID = Junction_ID_Ref, Junction_Count))
   } else {
     stop("ref should be hg19 or hg38")
   }
