@@ -1,3 +1,6 @@
+[![License: GPL v3](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
+[![Build Status](https://travis-ci.org/friend1ws/SF3B1ness.svg?branch=master)](https://travis-ci.org/friend1ws/SF3B1ness)
+
 # SF3B1ness
 R package for obtaining SF3B1ness score
 
