@@ -98,7 +98,7 @@ get_junc_count_info_recount2 <- function(junction_coverage_file) {
 get_junc_count_info_SJ <- function(SJ_file, ref = "hg19") {
 
   SJ <- readr::read_tsv(SJ_file, col_names = FALSE, col_types = "ccciiiiii") %>%
-    dplyr::mutate(SJ_Key = stringr::str_c(str_replace(X1, "chr", ""), X2, X3, sep = ","), Sample_ID = "1") %>%
+    dplyr::mutate(SJ_Key = stringr::str_c(stringr::str_replace(X1, "chr", ""), X2, X3, sep = ","), Sample_ID = "1") %>%
     dplyr::select(Sample_ID, SJ_Key, Junction_Count = X7)
 
   if (ref == "hg19") {
@@ -138,6 +138,7 @@ SF3B1ness_recount2 <- function(junction_coverage_file) {
 #' Obtain SF3B1ness score for STAR SJ.out.tab files
 #'
 #' @param SJ_file Junction file obtained through STAR alignment as SJ.out.tab file
+#' @param ref Reference genome (hg19 or hg38).
 #' @return SF3B1ness score
 #'
 #' @importFrom magrittr %>%

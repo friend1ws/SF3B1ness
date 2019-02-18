@@ -9,12 +9,15 @@ URL: https://github.com/friende1ws/SF3B1ness
 License: GPL-3
 Encoding: UTF-8
 LazyData: true
+Depends:
+   R (>= 2.10)
 Imports:
     VGAM,
     readr,
     stringr,
     dplyr,
-    magrittr
+    magrittr,
+    purrr
 RoxygenNote: 6.1.1
 Suggests: 
     testthat

@@ -8,6 +8,8 @@ SF3B1ness_SJ(SJ_file, ref = "hg19")
 }
 \arguments{
 \item{SJ_file}{Junction file obtained through STAR alignment as SJ.out.tab file}
+
+\item{ref}{Reference genome (hg19 or hg38).}
 }
 \value{
 SF3B1ness score
