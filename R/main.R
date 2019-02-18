@@ -153,7 +153,7 @@ SF3B1ness_SJ <- function(SJ_file, ref = "hg19") {
     scores <- get_score(junc_counts_info)
   }
 
-  D <- data.frame(Sample_Name = str_replace(basename(SJ_file), ".SJ.out.tab", ""), Score = scores$Score, stringsAsFactors = FALSE)
+  D <- data.frame(Sample_Name = stringr::str_replace(basename(SJ_file), ".SJ.out.tab", ""), Score = scores$Score, stringsAsFactors = FALSE)
   return(D)
 }
 
