@@ -47,7 +47,7 @@ get_score <- function(junc_counts_info) {
     probs <- cbind(prob0, prob1)
     probs[probs < 1e-100] <- 1e-100
 
-    tlratios <- log(probs[,2] / rowSums(probs)) - log(probs[,1])
+    tlratios <- log(probs[,2]) - log(probs[,1])
     tlratios[tlratios < -20] <- -20
     tlratios[tlratios > 20] <- 20
 
